@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 require('dotenv').config();
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const app = express();
 const port = process.env.PORT || 5000;
  
@@ -29,22 +29,45 @@ async function run() {
     await client.connect();
 
     const BrandCollection = client.db("BrandShop").collection('BrandItem');
+    const CartCollection = client.db("BrandShop").collection('CartItem');
 
     app.post('/brands', async (req, res) => {
       const brand = req.body;
       const result = await BrandCollection.insertOne(brand);
       res.send(result);
+
     })
-
-
     app.get('/brands', async (req, res) => {
       const cursor = BrandCollection.find();
       const result = await cursor.toArray();
       res.send(result);
-      
+
+    })
+    app.post('/myCart', async (req, res) => {
+      const cart = req.body;
+      const result = await CartCollection.insertOne(cart);
+      res.send(result);
     })
 
+
+    app.get('/myCart', async (req, res) => {
+      const cursor = CartCollection.find();
+      const result = await cursor.toArray();
+      res.send(result);
+
+    })
+
+
     
+
+    
+
+    app.get('/cardInfo/:id', async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) }
+      const result = await BrandCollection.findOne(query)
+      res.send(result);
+    })
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
