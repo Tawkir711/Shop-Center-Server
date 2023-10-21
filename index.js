@@ -60,7 +60,14 @@ async function run() {
 
     
 
-    
+    app.delete('/myCart/:id', async (req, res) => {
+      const id = req.params.id
+      console.log(id);
+      const query = { _id: id }
+      const result = await CartCollection.deleteOne(query)
+      res.send(result)
+      console.log(result)
+    })
 
     app.get('/cardInfo/:id', async (req, res) => {
       const id = req.params.id;
