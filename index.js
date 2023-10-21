@@ -73,7 +73,7 @@ async function run() {
           photo: newCard.photo,
         },
       };
-      const result = await CartCollection.updateOne(
+      const result = await BrandCollection.updateOne(
         filter,
         updateCard,
         options
