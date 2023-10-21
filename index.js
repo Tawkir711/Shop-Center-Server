@@ -58,7 +58,28 @@ async function run() {
     })
 
 
-    
+    app.put("/myCart/:id", async (req, res) => {
+      const id = req.params.id;
+      const newCard = req.body;
+      const filter = { _id: new ObjectId(id) };
+      const options = { upsert: true };
+      const updateCard = {
+        $set: {
+          name: newCard.name,
+          brandName: newCard.brandName,
+          type: newCard.type,
+          rating: newCard.rating,
+          price: newCard.price,
+          photo: newCard.photo,
+        },
+      };
+      const result = await CartCollection.updateOne(
+        filter,
+        updateCard,
+        options
+      );
+      res.send(result);
+    });
 
     app.delete('/myCart/:id', async (req, res) => {
       const id = req.params.id
